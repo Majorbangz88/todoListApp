@@ -4,6 +4,7 @@ import com.Joel.todolistapp.data.models.Task;
 import com.Joel.todolistapp.data.models.User;
 import com.Joel.todolistapp.data.reposittories.UserRepository;
 import com.Joel.todolistapp.dtos.requests.*;
+import com.Joel.todolistapp.dtos.responses.CreateTaskResponse;
 import com.Joel.todolistapp.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,24 +22,31 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private TaskService taskService;
 
-    @Override
-    public void register(RegisterUserRequest registerUserRequest) {
-        findUserBy(registerUserRequest);
-        User user = map(registerUserRequest);
-        userRepository.save(user);
-    }
+
+//    @Override
+//    public NotificationResponse sendNotification(NotificationRequest notificationRequest) {
+//        return notificationService.sendNotification(notificationRequest);
+//    }
 
     @Override
-    public User isLocked() {
-        User user = new User();
-        user.setLocked(true);
+    public User register(RegisterUserRequest registerUserRequest) {
+        findUserBy(registerUserRequest);
+        User user = map(registerUserRequest);
         userRepository.save(user);
 
         return user;
     }
 
     @Override
-    public User isUnlocked(UserLoginRequest userLoginRequest) {
+    public User logout(String username) {
+        User foundUser = findUserBy(username);
+        foundUser.setLocked(true);
+        userRepository.save(foundUser);
+
+        return foundUser;
+    }
+
+    public User unlock(UserLoginRequest userLoginRequest) {
         Optional<User> user = userRepository.findFirstUserByUsername(userLoginRequest.getUsername());
         if(user.isEmpty()) throw new UserNotFoundException("User not found");
         if (user.get().getUsername().equals(userLoginRequest.getUsername()) &&
@@ -51,11 +59,9 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void createTask(CreateTaskRequest createTaskrequest) {
-        Task task = new Task();
-        task.setUsername(findUserBy(createTaskrequest.getUsername()));
-        map(createTaskrequest, task);
-        taskService.saveTask(task);
+    public CreateTaskResponse createTask(CreateTaskRequest createTaskrequest) {
+        CreateTaskResponse response = taskService.save(createTaskrequest);
+        return response;
     }
 
     @Override
@@ -65,12 +71,9 @@ public class UserServiceImpl implements UserService{
         return foundUser.get();
     }
     @Override
-    public void updateTask(UpdateTaskRequest updateTaskrequest) {
-        Optional<Task> task = taskService.findTaskByTaskName(updateTaskrequest.getTaskName());
-        if (task.isEmpty()) throw new TaskNotFoundException("Task not found!");
-        Task newTask = map(updateTaskrequest, task);
-        taskService.deleteTask(task.get());
-        taskService.saveTask(newTask);
+    public Task updateTask(UpdateTaskRequest updateTaskrequest) {
+        Task updatedTask =  taskService.updateTask(updateTaskrequest);
+        return updatedTask;
     }
 
     @Override
@@ -81,11 +84,13 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void shareTask(ShareTaskRequest shareTaskRequest) {
+    public Task shareTask(ShareTaskRequest shareTaskRequest) {
         Task foundTask = taskService.findTaskBy(shareTaskRequest.getSenderUsername(), shareTaskRequest.getTaskName());
         User foundUser = findUserBy(shareTaskRequest.getReceiverUsername());
         Task newTask = map(foundUser, foundTask);
         taskService.saveTask(newTask);
+
+        return newTask;
     }
 
     @Override

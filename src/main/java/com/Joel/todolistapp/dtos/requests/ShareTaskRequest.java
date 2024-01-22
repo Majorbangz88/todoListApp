@@ -1,5 +1,6 @@
 package com.Joel.todolistapp.dtos.requests;
 
+import com.Joel.todolistapp.data.models.Task;
 import lombok.Data;
 
 @Data

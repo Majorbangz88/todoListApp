@@ -5,7 +5,9 @@ import com.Joel.todolistapp.data.models.User;
 import com.Joel.todolistapp.dtos.requests.CreateTaskRequest;
 import com.Joel.todolistapp.dtos.requests.SetReminderRequest;
 import com.Joel.todolistapp.dtos.requests.UpdateTaskRequest;
+import com.Joel.todolistapp.dtos.responses.CreateTaskResponse;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface TaskService {
@@ -22,9 +24,11 @@ public interface TaskService {
 
     long count();
 
-    void save(CreateTaskRequest createTaskRequest);
+    CreateTaskResponse save(CreateTaskRequest createTaskRequest);
 
-    void updateTask(UpdateTaskRequest updateTaskRequest);
+    Task updateTask(UpdateTaskRequest updateTaskRequest);
 
     void setReminder(SetReminderRequest setReminderRequest);
+
+    List<Task> returnAllTasks();
 }

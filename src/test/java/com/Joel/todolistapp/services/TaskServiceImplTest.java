@@ -39,7 +39,7 @@ class TaskServiceImplTest {
         createTaskRequest.setUsername("Username");
         createTaskRequest.setTaskName("Create task");
         createTaskRequest.setDescription("Create some task");
-        createTaskRequest.setDueDate(LocalDate.of(2023, Month.NOVEMBER, 23));
+        createTaskRequest.setDueDate("2024/02/12");
         createTaskRequest.setPriority("Very important");
         createTaskRequest.setComplete(false);
         createTaskRequest.setReminderDateTime(LocalDateTime.of(2023, Month.NOVEMBER,
@@ -55,7 +55,7 @@ class TaskServiceImplTest {
         createTaskRequest.setUsername("Username");
         createTaskRequest.setTaskName("Create task");
         createTaskRequest.setDescription("Create some task");
-        createTaskRequest.setDueDate(LocalDate.of(2023, Month.NOVEMBER, 23));
+        createTaskRequest.setDueDate("2024/02/12");
         createTaskRequest.setPriority("Very important");
         createTaskRequest.setComplete(false);
         createTaskRequest.setReminderDateTime(LocalDateTime.of(2023, Month.NOVEMBER,
@@ -84,7 +84,7 @@ class TaskServiceImplTest {
         createTaskRequest.setUsername("Username");
         createTaskRequest.setTaskName("Create task");
         createTaskRequest.setDescription("Create some task");
-        createTaskRequest.setDueDate(LocalDate.of(2023, Month.NOVEMBER, 23));
+        createTaskRequest.setDueDate("2024/02/12");
         createTaskRequest.setPriority("Very important");
         createTaskRequest.setComplete(false);
         createTaskRequest.setReminderDateTime(LocalDateTime.of(2023, Month.NOVEMBER,
@@ -113,7 +113,7 @@ class TaskServiceImplTest {
         createTaskRequest.setUsername("Username");
         createTaskRequest.setTaskName("Create task");
         createTaskRequest.setDescription("Create some task");
-        createTaskRequest.setDueDate(LocalDate.of(2023, Month.NOVEMBER, 23));
+        createTaskRequest.setDueDate("2024/02/12");
         createTaskRequest.setPriority("Very important");
         createTaskRequest.setComplete(true);
         createTaskRequest.setReminderDateTime(LocalDateTime.of(2023, Month.NOVEMBER,

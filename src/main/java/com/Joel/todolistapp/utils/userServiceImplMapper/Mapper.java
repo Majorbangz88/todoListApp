@@ -5,6 +5,8 @@ import com.Joel.todolistapp.data.models.User;
 import com.Joel.todolistapp.dtos.requests.CreateTaskRequest;
 import com.Joel.todolistapp.dtos.requests.RegisterUserRequest;
 import com.Joel.todolistapp.dtos.requests.UpdateTaskRequest;
+import com.Joel.todolistapp.dtos.responses.CreateTaskResponse;
+import com.Joel.todolistapp.dtos.responses.ShareTaskResponse;
 
 import java.util.Optional;
 
@@ -18,7 +20,19 @@ public class Mapper {
         return user;
     }
 
-    public static void map(CreateTaskRequest createTaskrequest, Task task) {
+    public static CreateTaskResponse map(CreateTaskRequest createTaskrequest, Task task) {
+        getCreateTask(createTaskrequest, task);
+
+        CreateTaskResponse response = getCreateTaskResponse(createTaskrequest);
+
+        return response;
+    }
+
+    public static void getCreateTask(CreateTaskRequest createTaskrequest, Task task) {
+        User taskCreator = new User();
+        taskCreator.setUsername(createTaskrequest.getUsername());
+
+        task.setUsername(taskCreator);
         task.setTaskName(createTaskrequest.getTaskName());
         task.setDescription(createTaskrequest.getDescription());
         task.setDueDate(createTaskrequest.getDueDate());
@@ -28,11 +42,22 @@ public class Mapper {
         task.setTaskCategory(createTaskrequest.getTaskCategory());
     }
 
-    public static Task map(UpdateTaskRequest updateTaskrequest, Optional<Task> task) {
-        Task newTask = task.get();
+    private static CreateTaskResponse getCreateTaskResponse(CreateTaskRequest createTaskrequest) {
+        CreateTaskResponse response = new CreateTaskResponse();
+        response.setTaskName(createTaskrequest.getUsername());
+        response.setDescription(createTaskrequest.getDescription());
+        response.setDueDate(createTaskrequest.getDueDate());
+        response.setPriority(createTaskrequest.getPriority());
+        response.setComplete(createTaskrequest.isComplete());
+        response.setReminderDateTime(createTaskrequest.getReminderDateTime());
+        response.setTaskCategory(createTaskrequest.getTaskCategory());
+        return response;
+    }
+
+    public static Task map(UpdateTaskRequest updateTaskrequest, Task newTask) {
         newTask.setTaskName(updateTaskrequest.getNewTaskName());
         newTask.setDescription(updateTaskrequest.getDescription());
-        newTask.setDueDate(updateTaskrequest.getDueDate());
+        newTask.setDueDate(String.valueOf(updateTaskrequest.getDueDate()));
         newTask.setPriority(updateTaskrequest.getPriority());
         newTask.setIsComplete(updateTaskrequest.isComplete());
         newTask.setReminderDateTime(updateTaskrequest.getReminderDateTime());
@@ -41,8 +66,12 @@ public class Mapper {
     }
 
     public static Task map(User foundUser, Task foundTask) {
+        User receiver = new User();
+        receiver.setUsername(foundUser.getUsername());
+//        receiver.setPassword(receiver.getPassword());
+
         Task newTask = new Task();
-        newTask.setUsername(foundUser);
+        newTask.setUsername(receiver);
         newTask.setTaskName(foundTask.getTaskName());
         newTask.setDescription(foundTask.getDescription());
         newTask.setDueDate(foundTask.getDueDate());

@@ -1,14 +1,19 @@
 package com.Joel.todolistapp.controllers;
 
+import com.Joel.todolistapp.data.models.Task;
 import com.Joel.todolistapp.data.models.User;
 import com.Joel.todolistapp.dtos.requests.*;
+import com.Joel.todolistapp.dtos.responses.CreateTaskResponse;
 import com.Joel.todolistapp.services.TaskService;
 import com.Joel.todolistapp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Optional;
+
 @RestController
-@RequestMapping(path = "/todolistApp")
+@RequestMapping(path = "/todolist")
 public class TodoListController {
 
     @Autowired
@@ -16,53 +21,62 @@ public class TodoListController {
     @Autowired
     private TaskService taskService;
 
-    @PostMapping("/api/registerUser")
-    public String register(@RequestBody RegisterUserRequest registerUserRequest) {
+    @PostMapping("/api/registration")
+    public User register(@RequestBody RegisterUserRequest registerUserRequest) {
         try {
-            userService.register(registerUserRequest);
-            return "Registration successful";
+            User registeredUser = userService.register(registerUserRequest);
+            return registeredUser;
         } catch(Exception ex) {
-            return ex.getMessage();
+            System.out.println(ex.getMessage());
         }
+        return null;
     }
 
-    @PostMapping(path = "/api/userLogin")
-    public String login(@RequestBody UserLoginRequest userLoginRequest) {
+    @PostMapping(path = "/api/login")
+    public User login(@RequestBody UserLoginRequest userLoginRequest) {
         try {
-            userService.isUnlocked(userLoginRequest);
-            return "Login successful";
+            User loggedInUser = userService.unlock(userLoginRequest);
+            return loggedInUser;
         } catch (Exception ex) {
-            return ex.getMessage();
+            System.out.println(ex.getMessage());
         }
+        return null;
     }
 
-    @PostMapping(path = "/api/userLogout")
-    public String logout() {
-        userService.isLocked();
-        return "Your details are secure!";
-    }
-
-    @PostMapping(path = "/api/userCreateTask")
-    public String createTask(@RequestBody CreateTaskRequest createTaskRequest) {
+    @PostMapping(path = "/api/Logout")
+    public User logout(@RequestBody String username) {
         try {
-            userService.createTask(createTaskRequest);
-            return "Task created successfully";
-        } catch(Exception ex) {
-            return ex.getMessage();
+            User user = userService.logout(username);
+            return user;
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
         }
+        return null;
     }
 
-    @PostMapping(path = "/api/userUpdateTask")
-    public String updateTask(@RequestBody UpdateTaskRequest updateTaskRequest) {
+    @PostMapping(path = "/api/tasks")
+    public CreateTaskResponse createTask(@RequestBody CreateTaskRequest createTaskRequest) {
         try {
-            userService.updateTask(updateTaskRequest);
-            return "Task updated!";
+            CreateTaskResponse response = userService.createTask(createTaskRequest);
+            return response;
         } catch(Exception ex) {
-           return ex.getMessage();
+            System.out.println(ex.getMessage());
         }
+        return null;
     }
 
-    @PostMapping(path = "/api/userDeleteTask")
+    @PatchMapping(path = "/api/updates")
+    public Task updateTask(@RequestBody UpdateTaskRequest updateTaskRequest) {
+        try {
+            Task updatedTask = userService.updateTask(updateTaskRequest);
+            return updatedTask;
+        } catch(Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+        return null;
+    }
+
+    @DeleteMapping(path = "/api/delete")
     public String deleteTask(@RequestBody CreateTaskRequest createTaskRequest) {
         try {
             userService.deleteTask(createTaskRequest);
@@ -72,24 +86,42 @@ public class TodoListController {
         }
     }
 
-    @PostMapping(path = "/api/userShareTask")
-    public String shareTask(@RequestBody ShareTaskRequest shareTaskRequest) {
-        try {
-            userService.shareTask(shareTaskRequest);
-            return "Task shared successfully!";
-        } catch (Exception ex) {
-            return ex.getMessage();
-        }
+    @DeleteMapping(path = "api/clear")
+    public void deleteAllTasks() {
+        taskService.deleteAll();
     }
 
-    @GetMapping(path = "/api/userFindTask/{taskName}")
-    public String findTask(@PathVariable String taskName) {
+    @PostMapping(path = "/api/shares")
+    public Task shareTask(@RequestBody ShareTaskRequest shareTaskRequest) {
         try {
-            taskService.findTaskByTaskName(taskName);
-            return "Task found!";
+            Task task = userService.shareTask(shareTaskRequest);
+            return task;
         } catch (Exception ex) {
-            return ex.getMessage();
+            System.out.println(ex.getMessage());
         }
+        return null;
+    }
+
+    @GetMapping(path = "/api/find/{taskName}")
+    public Optional<Task> findTask(@PathVariable String taskName) {
+        try {
+            Optional<Task> foundTask = taskService.findTaskByTaskName(taskName);
+            return foundTask;
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+        return Optional.empty();
+    }
+
+    @GetMapping(path = "api/findAll")
+    public List<Task> findAllTasks() {
+        try {
+            List<Task> allTasks = taskService.returnAllTasks();
+            return allTasks;
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+        }
+        return null;
     }
 
 }

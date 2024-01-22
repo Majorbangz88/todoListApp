@@ -1,18 +1,13 @@
-package com.Joel.todolistapp.dtos.requests;
+package com.Joel.todolistapp.dtos.responses;
 
-import com.Joel.todolistapp.data.models.TaskCategory;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class CreateTaskRequest {
-
-    private String id;
+public class CreateTaskResponse {
     private String username;
     private String taskName;
     private String description;
@@ -21,5 +16,4 @@ public class CreateTaskRequest {
     private boolean isComplete;
     private LocalDateTime reminderDateTime;
     private String taskCategory;
-
 }

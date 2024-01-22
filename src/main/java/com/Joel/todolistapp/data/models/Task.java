@@ -17,7 +17,7 @@ public class Task {
     private User username;
     private String taskName;
     private String description;
-    private LocalDate dueDate;
+    private String dueDate;
     private String priority;
     private Boolean isComplete;
     private LocalDateTime reminderDateTime;

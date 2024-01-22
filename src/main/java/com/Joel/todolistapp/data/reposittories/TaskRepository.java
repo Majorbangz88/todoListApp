@@ -9,5 +9,7 @@ import java.util.Optional;
 public interface TaskRepository extends MongoRepository<Task, String> {
     Optional<Task> findTaskByTaskName(String taskName);
 
-    Optional<Task> findTaskByUsernameAndTaskName(User username, String taskName);
+    Optional<Task> findByUsernameAndTaskName(User username, String taskName);
+
+    Optional<Task> findByTaskName(String taskName);
 }

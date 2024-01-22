@@ -1,32 +1,32 @@
 package com.Joel.todolistapp.services;
 
+import com.Joel.todolistapp.data.models.Task;
 import com.Joel.todolistapp.data.models.User;
-import com.Joel.todolistapp.dtos.requests.CreateTaskRequest;
-import com.Joel.todolistapp.dtos.requests.RegisterUserRequest;
-import com.Joel.todolistapp.dtos.requests.UpdateTaskRequest;
-import com.Joel.todolistapp.dtos.requests.UserLoginRequest;
-import com.Joel.todolistapp.dtos.requests.ShareTaskRequest;
+import com.Joel.todolistapp.dtos.requests.*;
+import com.Joel.todolistapp.dtos.responses.CreateTaskResponse;
 
 import java.util.Optional;
 
 public interface UserService {
-    void register(RegisterUserRequest registerUserRequest);
+//    NotificationResponse sendNotification(NotificationRequest notificationRequest);
+
+    User register(RegisterUserRequest registerUserRequest);
 
 
-    User isLocked();
+    User logout(String username);
 
-    User isUnlocked(UserLoginRequest userLoginRequest);
+    User unlock(UserLoginRequest userLoginRequest);
 
-    void createTask(CreateTaskRequest createTaskrequest);
+    CreateTaskResponse createTask(CreateTaskRequest createTaskrequest);
 
     User findUserBy(String username);
 
-    void updateTask(UpdateTaskRequest updateTaskRequest);
+    Task updateTask(UpdateTaskRequest updateTaskRequest);
 
     void deleteTask(CreateTaskRequest createTaskRequest2);
 
 
-    void shareTask(ShareTaskRequest shareTaskRequest);
+    Task shareTask(ShareTaskRequest shareTaskRequest);
 
     Optional<User> findUserByUsernameForTask(String username);
 

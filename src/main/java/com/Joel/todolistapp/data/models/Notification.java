@@ -13,10 +13,10 @@ public class Notification {
 
     @Id
     private String id;
-    private int NotificationId;
+    private String title;
     private String content;
-    private boolean isRead;
     private LocalDateTime dateTime;
+    private boolean isRead;
 
 
 }
